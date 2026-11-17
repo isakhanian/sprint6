@@ -1,8 +1,7 @@
+
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -159,7 +158,7 @@ public class TimetableTest {
     void testGetCountByCoachesEmptyTimetable() {
         Timetable timetable = new Timetable();
 
-        Map<Coach, Integer> result = timetable.getCountByCoaches();
+        List<CounterForCoach> result = timetable.getCountByCoaches();
 
         assertTrue(result.isEmpty());
     }
@@ -185,16 +184,15 @@ public class TimetableTest {
         timetable.addNewTrainingSession(new TrainingSession(
                 group, coach2, DayOfWeek.TUESDAY, new TimeOfDay(12, 0)));
 
-        Map<Coach, Integer> result = timetable.getCountByCoaches();
+        List<CounterForCoach> result = timetable.getCountByCoaches();
 
         assertEquals(2, result.size());
-        assertEquals(3, result.get(coach1));
-        assertEquals(1, result.get(coach2));
 
-        List<Coach> sortedCoaches = new ArrayList<>(result.keySet());
+        assertEquals(coach1, result.get(0).getCoach());
+        assertEquals(3, result.get(0).getCount());
 
-        assertEquals(coach1, sortedCoaches.get(0));
-        assertEquals(coach2, sortedCoaches.get(1));
+        assertEquals(coach2, result.get(1).getCoach());
+        assertEquals(1, result.get(1).getCount());
     }
 
     @Test
@@ -212,9 +210,10 @@ public class TimetableTest {
         timetable.addNewTrainingSession(new TrainingSession(
                 group, coach2, DayOfWeek.TUESDAY, new TimeOfDay(12, 0)));
 
-        Map<Coach, Integer> result = timetable.getCountByCoaches();
+        List<CounterForCoach> result = timetable.getCountByCoaches();
 
         assertEquals(1, result.size());
-        assertEquals(2, result.get(coach1));
+        assertEquals(coach1, result.get(0).getCoach());
+        assertEquals(2, result.get(0).getCount());
     }
 }
