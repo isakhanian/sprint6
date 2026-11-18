@@ -1,7 +1,6 @@
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +31,8 @@ public class Timetable {
 
     }
 
-    public Map<Coach, Integer> getCountByCoaches() {
+    
+    public List<CounterForCoach> getCountByCoaches() {
         Map<Coach, Integer> trainingCounts = new HashMap<>();
 
         for (DayTimetable day : timetable.values()) {
@@ -43,24 +43,19 @@ public class Timetable {
             }
         }
 
-        List<Map.Entry<Coach, Integer>> sortedEntries =
-                new ArrayList<>(trainingCounts.entrySet());
+        List<CounterForCoach> result = new ArrayList<>();
 
-        sortedEntries.sort(new Comparator<Map.Entry<Coach, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Coach, Integer> a,
-                               Map.Entry<Coach, Integer> b) {
-                return Integer.compare(b.getValue(), a.getValue());
-            }
-        });
+        for (Map.Entry<Coach, Integer> entry : trainingCounts.entrySet()) {
+            CounterForCoach counter = new CounterForCoach(
+                    entry.getKey(), entry.getValue());
 
-        Map<Coach, Integer> result = new LinkedHashMap<>();
-
-        for (Map.Entry<Coach, Integer> entry : sortedEntries) {
-            result.put(entry.getKey(), entry.getValue());
+            result.add(counter);
         }
 
+        Collections.sort(result);
+
         return result;
-    }
+}
+
 
 }
